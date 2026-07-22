@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "extend-shopify",
-  "homepage": "https://github.com/Muhammad-Hasham-Khalid/extend-shopify-registry",
+  "homepage": "https://github.com/extend-commerce/extend-shopify-registry",
   "items": [
     {
       "name": "combobox",
