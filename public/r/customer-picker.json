@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "customer-picker",
+  "type": "registry:block",
+  "title": "Customer Picker",
+  "description": "Example block reproducing the Shopify admin customer picker: create-action row, customers with emails, disabled rows with reasons.",
+  "registryDependencies": [
+    "@extend-shopify/combobox"
+  ],
+  "files": [
+    {
+      "path": "registry/extend-shopify/blocks/customer-picker/customer-picker.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { PlusCircleIcon } from \"@shopify/polaris-icons\";\n\nimport {\n  Combobox,\n  ComboboxAction,\n  ComboboxContent,\n  ComboboxControl,\n  ComboboxEmpty,\n  ComboboxItem,\n  ComboboxItemContent,\n  ComboboxItemSuffix,\n  ComboboxLabel,\n  ComboboxList,\n} from \"@/registry/extend-shopify/ui/combobox\";\n\nexport type Customer = {\n  id: string;\n  name: string;\n  email: string;\n  /** e.g. \"Already added\" | \"Added to another company\" — renders the row disabled */\n  disabledReason?: string;\n};\n\nexport function CustomerPicker({\n  label = \"Customer\",\n  placeholder = \"Search or create a customer\",\n  customers,\n  onSelect,\n  onCreateNew,\n  createLabel = \"Create a new customer\",\n}: {\n  label?: string;\n  placeholder?: string;\n  customers: Customer[];\n  onSelect?: (customer: Customer) => void;\n  onCreateNew?: (query: string) => void;\n  createLabel?: string;\n}) {\n  const [query, setQuery] = React.useState(\"\");\n  const inputId = React.useId();\n\n  return (\n    <Combobox\n      items={customers}\n      autoHighlight\n      itemToStringLabel={(c: Customer) => c.name}\n      onValueChange={(c: Customer | null) => {\n        if (c) onSelect?.(c);\n      }}\n      inputValue={query}\n      onInputValueChange={setQuery}\n    >\n      <ComboboxLabel\n        htmlFor={inputId}\n        className=\"mb-2 font-(--es-font-weight-bold)\"\n      >\n        {label}\n      </ComboboxLabel>\n      <ComboboxControl id={inputId} placeholder={placeholder} />\n      <ComboboxContent>\n        {onCreateNew ? (\n          <ComboboxAction icon={PlusCircleIcon} onClick={() => onCreateNew(query)}>\n            {createLabel}\n          </ComboboxAction>\n        ) : null}\n        <ComboboxList>\n          {(customer: Customer) => (\n            <ComboboxItem\n              key={customer.id}\n              value={customer}\n              disabled={Boolean(customer.disabledReason)}\n            >\n              <ComboboxItemContent\n                title={customer.name}\n                description={customer.email}\n              />\n              {customer.disabledReason ? (\n                <ComboboxItemSuffix>{customer.disabledReason}</ComboboxItemSuffix>\n              ) : null}\n            </ComboboxItem>\n          )}\n        </ComboboxList>\n        <ComboboxEmpty>No customers found</ComboboxEmpty>\n      </ComboboxContent>\n    </Combobox>\n  );\n}\n",
+      "type": "registry:component"
+    }
+  ]
+}
