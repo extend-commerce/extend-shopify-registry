@@ -1,23 +1,79 @@
-# registry-template
+# extend-shopify registry
 
-You can use the `shadcn` CLI to run your own component registry. Running your own
-component registry allows you to distribute your custom components, hooks, pages, and
-other files to any React project.
+Components the Shopify admin has but Polaris doesn't ship — rebuilt on
+[Base UI](https://base-ui.com) and Tailwind CSS v4, pixel-matched to the
+current admin design (the `<s-*>` web components era), and distributed as a
+[shadcn registry](https://ui.shadcn.com/docs/registry).
 
-> [!IMPORTANT]  
-> This template uses Tailwind v4. For Tailwind v3, see [registry-template-v3](https://github.com/shadcn-ui/registry-template-v3).
+**Docs & live demo:** https://extend-shopify-registry.vercel.app
 
-## Getting Started
+## Installation
 
-This is a template for creating a custom registry using Next.js.
+Requires a React project with [shadcn initialized](https://ui.shadcn.com/docs/installation)
+and Tailwind CSS v4.
 
-- The template uses a `registry.json` file to define components and their files.
-- The `shadcn build` command is used to build the registry.
-- The registry items are served as static files under `public/r/[name].json`.
-- The template also includes a route handler for serving registry items.
-- Every registry item are compatible with the `shadcn` CLI.
-- We have also added v0 integration using the `Open in v0` api.
+Register the namespace once:
 
-## Documentation
+```bash
+npx shadcn@latest registry add @extend-shopify=https://extend-shopify-registry.vercel.app/r/{name}.json
+```
 
-Visit the [shadcn documentation](https://ui.shadcn.com/docs/registry) to view the full documentation.
+Then install components:
+
+```bash
+npx shadcn@latest add @extend-shopify/combobox
+```
+
+Direct URLs also work without configuration:
+
+```bash
+npx shadcn@latest add https://extend-shopify-registry.vercel.app/r/combobox.json
+```
+
+Installing a component also brings in `extend-shopify-tokens.css` (the design
+token layer) and the `@base-ui/react` + `@shopify/polaris-icons` dependencies.
+
+### Font
+
+Inside the Shopify admin (App Home) InterVariable is already loaded. Outside
+the admin, load the same stylesheet Shopify uses:
+
+```html
+<link rel="stylesheet" href="https://cdn.shopify.com/static/fonts/inter/v4/styles.css" />
+```
+
+## Components
+
+| Item | Description |
+| --- | --- |
+| `combobox` | Composable combobox following the Base UI anatomy: search field with magnifier prefix, pinned action row, two-line options, disabled rows with suffix text, empty state, async filtering. Single-select. |
+| `customer-picker` | Assembled block reproducing the admin customer picker (create-action row, customers with emails, disabled reasons). |
+
+## How fidelity works
+
+- `scripts/extract-tokens.mjs` mines the semantic design tokens straight from
+  Shopify's `polaris.js` CDN bundle (the real values live in its CSS `var()`
+  fallbacks) and emits `registry/extend-shopify/ui/extend-shopify-tokens.css`
+  as `--es-*` variables. Re-run it when Shopify ships a design change:
+
+  ```bash
+  node scripts/extract-tokens.mjs
+  ```
+
+- Structural metrics (input height, radii, focus ring construction, the
+  popover elevation shadow) are verified against live-rendered native
+  components.
+- The [/compare](https://extend-shopify-registry.vercel.app/compare) page
+  renders the real Shopify web components next to ours; computed styles for
+  the field, input, and label are identical.
+
+## Development
+
+```bash
+pnpm install
+pnpm dev              # docs site + demos on localhost:3000
+pnpm registry:build   # rebuild public/r/*.json from registry.json
+```
+
+Not affiliated with Shopify. "Polaris" and the admin design belong to
+Shopify; this project only helps your app match them.
