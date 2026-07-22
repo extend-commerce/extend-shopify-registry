@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>polaris.js extraction harness</title>
+  <script src="https://cdn.shopify.com/shopifycloud/polaris.js"></script>
+  <style>
+    body { margin: 0; padding: 24px; background: #f7f7f7; }
+    .row { max-width: 400px; margin-bottom: 24px; background: #fff; padding: 16px; border-radius: 12px; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <s-search-field label="Customer" placeholder="Search or create a customer"></s-search-field>
+  </div>
+  <div class="row">
+    <s-text-field label="Main contact" placeholder="Search"></s-text-field>
+  </div>
+  <div class="row">
+    <s-button variant="secondary" icon="plus-circle">Create a new customer</s-button>
+  </div>
+  <div class="row">
+    <s-text>Ayumu Hirano</s-text><br/>
+    <s-text tone="subdued">ayumu.hirano@yopmail.com</s-text>
+  </div>
+  <div class="row">
+    <s-icon type="search"></s-icon>
+    <s-icon type="plus-circle"></s-icon>
+    <s-icon type="chevron-right"></s-icon>
+    <s-icon type="chevron-left"></s-icon>
+  </div>
+  <div class="row">
+    <s-select label="Country" placeholder="Select"></s-select>
+  </div>
+</body>
+</html>
